@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cyber Mint design system. All colors HSL. */
+@layer base {
+  :root {
+    /* Cyber Mint dark theme as default */
+    --background: 220 30% 4%;
+    --foreground: 160 20% 96%;
+
+    --card: 220 30% 6%;
+    --card-foreground: 160 20% 96%;
+
+    --popover: 220 30% 5%;
+    --popover-foreground: 160 20% 96%;
+
+    /* Mint primary */
+    --primary: 156 100% 68%;
+    --primary-foreground: 220 40% 6%;
+    --primary-glow: 156 100% 75%;
+
+    /* Electric blue secondary */
+    --secondary: 200 100% 62%;
+    --secondary-foreground: 220 40% 6%;
+
+    --muted: 220 25% 10%;
+    --muted-foreground: 200 15% 65%;
+
+    --accent: 270 80% 65%;
+    --accent-foreground: 160 20% 96%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 200 30% 18%;
+    --input: 220 25% 12%;
+    --ring: 156 100% 68%;
+
+    --radius: 0.75rem;
+
+    /* Glass surface tokens */
+    --glass-bg: 200 40% 8%;
+    --glass-border: 156 60% 50%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(156 100% 68%), hsl(200 100% 62%));
+    --gradient-radial: radial-gradient(ellipse at top, hsl(156 100% 50% / 0.15), transparent 60%);
+    --gradient-mesh: radial-gradient(at 20% 30%, hsl(156 100% 50% / 0.18) 0px, transparent 50%),
+                     radial-gradient(at 80% 20%, hsl(200 100% 50% / 0.18) 0px, transparent 50%),
+                     radial-gradient(at 60% 80%, hsl(270 80% 60% / 0.12) 0px, transparent 50%);
+
+    /* Shadows / glows */
+    --glow-mint: 0 0 40px hsl(156 100% 60% / 0.5), 0 0 80px hsl(156 100% 60% / 0.2);
+    --glow-blue: 0 0 40px hsl(200 100% 62% / 0.5), 0 0 80px hsl(200 100% 62% / 0.2);
+    --shadow-glass: 0 8px 32px hsl(220 50% 2% / 0.6), inset 0 1px 0 hsl(156 100% 70% / 0.1);
+
+    --sidebar-background: 220 30% 5%;
+    --sidebar-foreground: 160 20% 90%;
+    --sidebar-primary: 156 100% 68%;
+    --sidebar-primary-foreground: 220 40% 6%;
+    --sidebar-accent: 220 25% 10%;
+    --sidebar-accent-foreground: 156 100% 68%;
+    --sidebar-border: 200 30% 14%;
+    --sidebar-ring: 156 100% 68%;
+  }
+
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 220 40% 6%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 40% 6%;
+    --primary: 156 80% 40%;
+    --primary-foreground: 0 0% 100%;
+    --border: 220 15% 88%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    background-image: var(--gradient-mesh);
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  code, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl border;
+    background: hsl(var(--glass-bg) / 0.6);
+    border-color: hsl(var(--glass-border) / 0.15);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-strong {
+    @apply backdrop-blur-2xl border;
+    background: hsl(var(--glass-bg) / 0.8);
+    border-color: hsl(var(--glass-border) / 0.25);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .neon-border {
+    position: relative;
+  }
+  .neon-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--gradient-primary);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(hsl(var(--primary) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .glow-mint {
+    box-shadow: var(--glow-mint);
+  }
+  .glow-blue {
+    box-shadow: var(--glow-blue);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 30px hsl(var(--primary) / 0.6);
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { scrollbar-width: none; }
+
+  .marquee {
+    animation: marquee 30s linear infinite;
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.4); }
+  50% { box-shadow: 0 0 60px hsl(var(--primary) / 0.8); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes grid-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 48px 48px; }
+}
