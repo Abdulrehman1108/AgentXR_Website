@@ -11,6 +11,9 @@ import UseCases from "./pages/UseCases.tsx";
 import Docs from "./pages/Docs.tsx";
 import Contact from "./pages/Contact.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Content from "./pages/Content.tsx";
+import Agents from "./pages/Agents.tsx";
+import SettingsPage from "./pages/Settings.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -32,6 +35,9 @@ const App = () => (
             <Route path="/docs" element={<Docs />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/content" element={<Content />} />
+            <Route path="/agents" element={<Agents />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="*" element={<NotFound />} />

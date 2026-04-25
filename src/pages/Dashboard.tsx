@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard, FileText, Sparkles, Settings, LogOut, Search, Bell,
@@ -8,6 +8,13 @@ import { Scene3D } from "@/components/three/Scene3D";
 import { DashboardScene } from "@/components/three/DashboardScene";
 import { GlassCard } from "@/components/GlassCard";
 import { NeonButton } from "@/components/NeonButton";
+
+const navItems = [
+  { icon: LayoutDashboard, label: "Overview", to: "/dashboard" },
+  { icon: FileText, label: "Content", to: "/content" },
+  { icon: Sparkles, label: "Agents", to: "/agents" },
+  { icon: Settings, label: "Settings", to: "/settings" },
+];
 
 const kpis = [
   { l: "Articles published", v: "1,284", d: "+12.4%", icon: FileText },
@@ -31,6 +38,73 @@ const articles = [
   { t: "Headless vs agentic: a comparison", s: "Published", v: "8.1k", score: 94 },
 ];
 
+/** Shared sidebar used across all dashboard pages */
+export const DashboardSidebar = () => {
+  const { pathname } = useLocation();
+  return (
+    <aside className="w-60 min-h-screen glass border-r border-border/50 p-6 hidden md:flex flex-col shrink-0">
+      <Link to="/" className="flex items-center gap-2 mb-10">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary blur-md opacity-60" />
+          <div className="relative bg-background rounded-lg p-1.5 border border-primary/30">
+            <Sparkles className="h-5 w-5 text-primary" />
+          </div>
+        </div>
+        <span className="font-display font-bold">AgentXR</span>
+      </Link>
+
+      <nav className="space-y-1 flex-1">
+        {navItems.map((item) => {
+          const active = pathname === item.to;
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
+                active
+                  ? "bg-primary/15 text-primary border border-primary/20 shadow-[0_0_12px_hsl(156_100%_60%/0.2)]"
+                  : "text-muted-foreground hover:bg-muted/30 hover:text-foreground"
+              }`}
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+              {active && (
+                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <Link
+        to="/"
+        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-muted/30 transition-all"
+      >
+        <LogOut className="h-4 w-4" /> Sign out
+      </Link>
+    </aside>
+  );
+};
+
+/** Shared topbar used across all dashboard pages */
+export const DashboardTopbar = () => (
+  <header className="glass border-b border-border/50 px-6 py-4 flex items-center gap-4 sticky top-0 z-20">
+    <div className="flex-1 max-w-md relative">
+      <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+      <input
+        placeholder="Search content, agents, settings…"
+        className="w-full glass rounded-full pl-10 pr-4 py-2 text-sm bg-input/50 outline-none focus:border-primary/60 transition-all"
+      />
+    </div>
+    <button className="glass rounded-full p-2.5 hover:border-primary/40 transition-all">
+      <Bell className="h-4 w-4" />
+    </button>
+    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-semibold text-sm shadow-[0_0_16px_hsl(156_100%_60%/0.4)]">
+      AL
+    </div>
+  </header>
+);
+
 const Dashboard = () => {
   return (
     <div className="min-h-screen relative">
@@ -39,53 +113,10 @@ const Dashboard = () => {
       </Scene3D>
 
       <div className="relative z-10 flex">
-        {/* Sidebar */}
-        <aside className="w-60 min-h-screen glass border-r border-border/50 p-6 hidden md:flex flex-col">
-          <Link to="/" className="flex items-center gap-2 mb-10">
-            <div className="bg-background rounded-lg p-1.5 border border-primary/30">
-              <Sparkles className="h-5 w-5 text-primary" />
-            </div>
-            <span className="font-display font-bold">Nexus</span>
-          </Link>
-          <nav className="space-y-1 flex-1">
-            {[
-              { icon: LayoutDashboard, l: "Overview", active: true },
-              { icon: FileText, l: "Content" },
-              { icon: Sparkles, l: "Agents" },
-              { icon: Settings, l: "Settings" },
-            ].map((i) => (
-              <button
-                key={i.l}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all ${
-                  i.active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/30"
-                }`}
-              >
-                <i.icon className="h-4 w-4" /> {i.l}
-              </button>
-            ))}
-          </nav>
-          <Link to="/" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-muted/30">
-            <LogOut className="h-4 w-4" /> Sign out
-          </Link>
-        </aside>
+        <DashboardSidebar />
 
         <div className="flex-1 min-w-0">
-          {/* Topbar */}
-          <header className="glass border-b border-border/50 px-6 py-4 flex items-center gap-4 sticky top-0 z-20">
-            <div className="flex-1 max-w-md relative">
-              <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <input
-                placeholder="Search content, agents, settings…"
-                className="w-full glass rounded-full pl-10 pr-4 py-2 text-sm bg-input/50 outline-none focus:border-primary/60"
-              />
-            </div>
-            <button className="glass rounded-full p-2.5 hover:border-primary/40 transition-all">
-              <Bell className="h-4 w-4" />
-            </button>
-            <div className="h-9 w-9 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm">
-              AL
-            </div>
-          </header>
+          <DashboardTopbar />
 
           <main className="p-6 lg:p-8 space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -115,7 +146,7 @@ const Dashboard = () => {
               <GlassCard className="lg:col-span-2 space-y-5">
                 <div className="flex items-center justify-between">
                   <h3 className="font-display font-semibold text-lg">Recent content</h3>
-                  <button className="text-xs text-primary">View all</button>
+                  <Link to="/content" className="text-xs text-primary hover:underline">View all</Link>
                 </div>
                 <div className="space-y-2">
                   {articles.map((a, i) => (
@@ -160,17 +191,19 @@ const Dashboard = () => {
 
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { l: "Spawn writer agent", d: "Start a new draft" },
-                { l: "Run SEO audit", d: "Refresh top pages" },
-                { l: "Translate batch", d: "Localize selected" },
+                { l: "Spawn writer agent", d: "Start a new draft", to: "/agents" },
+                { l: "Run SEO audit", d: "Refresh top pages", to: "/agents" },
+                { l: "Translate batch", d: "Localize selected", to: "/content" },
               ].map((q) => (
-                <GlassCard key={q.l} hover className="cursor-pointer space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                    <span className="font-semibold">{q.l}</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{q.d}</p>
-                </GlassCard>
+                <Link key={q.l} to={q.to}>
+                  <GlassCard hover className="cursor-pointer space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <span className="font-semibold">{q.l}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{q.d}</p>
+                  </GlassCard>
+                </Link>
               ))}
             </div>
           </main>
